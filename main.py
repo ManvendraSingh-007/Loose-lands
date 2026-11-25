@@ -10,8 +10,11 @@ from config import (
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     TILE_SIZE,
+    BUILDING_TYPES,
+    DIRECTIONS,
 )
 from tile_map import TileMap
+from buildings import BuildingManager
 
 
 def handle_camera_movement(dt: float, camera_x: float, camera_y: float) -> tuple[float, float]:
@@ -63,6 +66,43 @@ def draw_hover_highlight(
     pg.draw.rect(surface, HOVER_COLOR, rect, 2)
 
 
+def select_building_kind(event: pg.event.Event, current_kind: str) -> str:
+    if event.key == pg.K_1:
+        return BUILDING_TYPES[0]
+    elif event.key == pg.K_2:
+        return BUILDING_TYPES[1]
+    elif event.key == pg.K_3:
+        return BUILDING_TYPES[2]
+    return current_kind
+
+
+
+def handle_building_placement(
+    event: pg.event.Event,
+    screen_x: int,
+    screen_y: int,
+    camera_x: float,
+    camera_y: float,
+    building_manager: BuildingManager,
+    tile_map: TileMap,
+) -> None:
+    """Handle building placement"""
+
+    # convert screen position to grid position
+    grid_x, grid_y = tile_map.screen_to_grid(screen_x, screen_y, camera_x, camera_y)
+    
+    if event.button == 1:
+        building_manager.place(
+            building_manager.selected_building_kind, 
+            grid_x, 
+            grid_y, 
+            DIRECTIONS[building_manager.selected_direction_index], 
+            tile_map)
+
+    elif event.button == 3:
+        building_manager.remove(grid_x, grid_y)
+
+
 def main() -> None:
     """Run the Loose Land game loop."""
     pg.init()
@@ -71,6 +111,9 @@ def main() -> None:
     clock = pg.time.Clock()
 
     tile_map = TileMap()
+    building_manager = BuildingManager()
+
+    building_manager.selected_building_kind = BUILDING_TYPES[0]
     camera_x = 0.0
     camera_y = 0.0
 
@@ -82,10 +125,18 @@ def main() -> None:
                 pg.quit()
                 sys.exit()
 
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pg.mouse.get_pos()
+                handle_building_placement(event, mouse_x, mouse_y, camera_x, camera_y, building_manager, tile_map)
+
+            elif event.type == pg.KEYDOWN:
+                building_manager.selected_building_kind = select_building_kind(event, building_manager.selected_building_kind)
+
         camera_x, camera_y = handle_camera_movement(dt, camera_x, camera_y)
 
         screen.fill((0, 0, 0))
         tile_map.draw(screen, camera_x, camera_y)
+        building_manager.draw(screen, camera_x, camera_y)
         draw_hover_highlight(screen, tile_map, camera_x, camera_y)
         pg.display.flip()
 
