@@ -89,6 +89,11 @@ class TileMap:
         # Convert world pixels to tile index (e.g., world_x = 500, TILE_SIZE = 50 -> tile index 10)
         return int(world_x // TILE_SIZE), int(world_y // TILE_SIZE)
 
+    @staticmethod
+    def grid_to_screen(grid_x: int, grid_y: int, camera_x: float, camera_y: float) -> tuple[int, int]:
+        """Convert grid tile coordinates to screen pixel coordinates."""
+        return int(grid_x * TILE_SIZE - camera_x), int(grid_y * TILE_SIZE - camera_y)
+
     def draw(self, surface: pg.Surface, camera_x: float, camera_y: float) -> None:
         """Draw only the tiles currently visible on screen."""
         start_x = max(0, int(camera_x // TILE_SIZE))
