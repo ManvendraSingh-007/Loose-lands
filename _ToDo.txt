@@ -1,0 +1,5 @@
+im going to slepp nowsa, tommorow i will add better texture grass lok so bad, 
+rn it have 3 modes miner, furnance, belt 
+miner -> default (key = 1) it mines on ores only but right clicking again unmines them, so its bad dont want that
+
+also if possible try adding zoom in and zoom out and maybe expanding the map little bit
