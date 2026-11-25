@@ -12,7 +12,7 @@ A 2D factory/automation game built with Python and Pygame.
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install pygame-ce
+python -m pip install -r requirements.txt
 ```
 
 ## Run
