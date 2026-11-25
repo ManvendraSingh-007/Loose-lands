@@ -19,3 +19,12 @@ TILE_COLORS: dict[str, tuple[int, int, int]] = {
 
 GRID_LINE_COLOR = (55, 100, 50)
 HOVER_COLOR = (255, 230, 90)
+
+DIRECTIONS = ("N", "E", "S", "W")
+BUILDING_TYPES = ("miner", "belt", "furnace")
+
+BUILDING_COLORS: dict[str, tuple[int, int, int]] = {
+    "miner": (200, 165, 50),
+    "belt": (90, 95, 105),
+    "furnace": (185, 75, 55),
+}
