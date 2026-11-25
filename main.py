@@ -15,6 +15,7 @@ from config import (
 )
 from tile_map import TileMap
 from buildings import BuildingManager
+from texture import load_textures
 
 
 def handle_camera_movement(dt: float, camera_x: float, camera_y: float) -> tuple[float, float]:
@@ -108,6 +109,7 @@ def main() -> None:
     pg.init()
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pg.display.set_caption("Loose Land")
+    textures = load_textures()
     clock = pg.time.Clock()
 
     tile_map = TileMap()
@@ -135,7 +137,7 @@ def main() -> None:
         camera_x, camera_y = handle_camera_movement(dt, camera_x, camera_y)
 
         screen.fill((0, 0, 0))
-        tile_map.draw(screen, camera_x, camera_y)
+        tile_map.draw(screen, camera_x, camera_y, textures)
         building_manager.draw(screen, camera_x, camera_y)
         draw_hover_highlight(screen, tile_map, camera_x, camera_y)
         pg.display.flip()

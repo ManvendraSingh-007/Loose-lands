@@ -94,7 +94,7 @@ class TileMap:
         """Convert grid tile coordinates to screen pixel coordinates."""
         return int(grid_x * TILE_SIZE - camera_x), int(grid_y * TILE_SIZE - camera_y)
 
-    def draw(self, surface: pg.Surface, camera_x: float, camera_y: float) -> None:
+    def draw(self, surface: pg.Surface, camera_x: float, camera_y: float, textures: dict[str, pg.Surface]) -> None:
         """Draw only the tiles currently visible on screen."""
         start_x = max(0, int(camera_x // TILE_SIZE))
         end_x = min(self.width, int((camera_x + SCREEN_WIDTH) // TILE_SIZE) + 1)
@@ -106,7 +106,8 @@ class TileMap:
             for grid_x in range(start_x, end_x):
                 screen_x = int(grid_x * TILE_SIZE - camera_x)
                 tile_type = self.tiles[grid_y][grid_x]
-                color = TILE_COLORS[tile_type]
                 rect = pg.Rect(screen_x, screen_y, TILE_SIZE, TILE_SIZE)
-                pg.draw.rect(surface, color, rect)
-                pg.draw.rect(surface, GRID_LINE_COLOR, rect, 1)
+                if tile_type in textures:
+                    surface.blit(textures[tile_type], (screen_x, screen_y))
+                else:
+                    pg.draw.rect(surface, TILE_COLORS[tile_type], rect)
