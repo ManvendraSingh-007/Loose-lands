@@ -1,0 +1,18 @@
+[project]
+name = "LooseLands"
+version = "0.1.0"
+description = "no description yet"
+requires-python = ">=3.9"
+
+# put dependencies here
+dependencies = ["pygame-ce"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+LooseLands = "loose_lands.main:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

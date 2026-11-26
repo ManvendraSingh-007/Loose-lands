@@ -1,8 +1,16 @@
+from __future__ import annotations
+
+import os
 import sys
+from pathlib import Path
+
 import pygame as pg
 
-from config import (
+from loose_lands.buildings import BuildingManager
+from loose_lands.config import (
+    BUILDING_TYPES,
     CAMERA_SPEED,
+    DIRECTIONS,
     FPS,
     HOVER_COLOR,
     MAP_HEIGHT,
@@ -10,15 +18,18 @@ from config import (
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     TILE_SIZE,
-    BUILDING_TYPES,
-    DIRECTIONS,
 )
-from tile_map import TileMap
-from buildings import BuildingManager
-from texture import load_textures
+from loose_lands.texture import load_textures
+from loose_lands.tile_map import TileMap
+
+PROJECT_ROOT = (
+    Path(__file__).resolve().parents[2]
+)
 
 
-def handle_camera_movement(dt: float, camera_x: float, camera_y: float) -> tuple[float, float]:
+def handle_camera_movement(
+    dt: float, camera_x: float, camera_y: float
+) -> tuple[float, float]:
     """Update camera position based on WASD or arrow key input, clamped to map bounds."""
     keys = pg.key.get_pressed()
     dx = 0.0
@@ -33,13 +44,11 @@ def handle_camera_movement(dt: float, camera_x: float, camera_y: float) -> tuple
     if keys[pg.K_s] or keys[pg.K_DOWN]:
         dy += 1.0
 
-
     # set max x and max y for the camera to stop the camera from going out of bounds
     # map_width(60) * tile_size(32) = 1920 (total map width in pixels)
-    # 1920 - screen_width(800) = 1120 (maximum camera x position) 
+    # 1920 - screen_width(800) = 1120 (maximum camera x position)
     max_x = max(0, MAP_WIDTH * TILE_SIZE - SCREEN_WIDTH)
     max_y = max(0, MAP_HEIGHT * TILE_SIZE - SCREEN_HEIGHT)
-
 
     # new_x and new_y calculate where the camera wants to move next
     # add tiny dx and dy to the camera position to make it move smoothly
@@ -77,7 +86,6 @@ def select_building_kind(event: pg.event.Event, current_kind: str) -> str:
     return current_kind
 
 
-
 def handle_building_placement(
     event: pg.event.Event,
     screen_x: int,
@@ -91,21 +99,24 @@ def handle_building_placement(
 
     # convert screen position to grid position
     grid_x, grid_y = tile_map.screen_to_grid(screen_x, screen_y, camera_x, camera_y)
-    
+
     if event.button == 1:
         building_manager.place(
-            building_manager.selected_building_kind, 
-            grid_x, 
-            grid_y, 
-            DIRECTIONS[building_manager.selected_direction_index], 
-            tile_map)
+            building_manager.selected_building_kind,
+            grid_x,
+            grid_y,
+            DIRECTIONS[building_manager.selected_direction_index],
+            tile_map,
+        )
 
     elif event.button == 3:
         building_manager.remove(grid_x, grid_y)
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     """Run the Loose Land game loop."""
+    os.chdir(PROJECT_ROOT) # to be able to access assets/
+
     pg.init()
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pg.display.set_caption("Loose Land")
@@ -129,10 +140,20 @@ def main() -> None:
 
             elif event.type == pg.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pg.mouse.get_pos()
-                handle_building_placement(event, mouse_x, mouse_y, camera_x, camera_y, building_manager, tile_map)
+                handle_building_placement(
+                    event,
+                    mouse_x,
+                    mouse_y,
+                    camera_x,
+                    camera_y,
+                    building_manager,
+                    tile_map,
+                )
 
             elif event.type == pg.KEYDOWN:
-                building_manager.selected_building_kind = select_building_kind(event, building_manager.selected_building_kind)
+                building_manager.selected_building_kind = select_building_kind(
+                    event, building_manager.selected_building_kind
+                )
 
         camera_x, camera_y = handle_camera_movement(dt, camera_x, camera_y)
 

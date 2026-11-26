@@ -1,5 +1,7 @@
 import pygame as pg
-from config import TILE_SIZE
+
+from loose_lands.config import TILE_SIZE
+
 
 def load_textures() -> dict[str, pg.Surface]:
     names = ["grass"]
