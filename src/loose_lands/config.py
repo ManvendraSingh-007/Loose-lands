@@ -17,11 +17,11 @@ TILE_COLORS: dict[str, tuple[int, int, int]] = {
     "water": (45, 95, 165),
 }
 
-GRID_LINE_COLOR = (55, 100, 50)
-HOVER_COLOR = (255, 230, 90)
+GRID_LINE_COLOR: tuple[int, ...] = (55, 100, 50)
+HOVER_COLOR: tuple[int, ...] = (255, 230, 90)
 
-DIRECTIONS = ("N", "E", "S", "W")
-BUILDING_TYPES = ("miner", "belt", "furnace")
+DIRECTIONS: tuple[str, ...] = ("N", "E", "S", "W")
+BUILDING_TYPES: tuple[str, ...] = ("miner", "belt", "furnace")
 
 BUILDING_COLORS: dict[str, tuple[int, int, int]] = {
     "miner": (200, 165, 50),
