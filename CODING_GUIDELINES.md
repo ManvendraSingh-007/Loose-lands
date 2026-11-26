@@ -4,15 +4,7 @@ the guidelines keep our codebase clean, readable, and easy for everyone innteres
 
 ---
 
-## 1. AI-Assisted Coding
-AI tools are **allowed and encouraged**, with three rules:
-1. **Understand what you commit:** If you can't explain what a function does, don't push it.
-2. **Test before pushing:** Run and verify the feature (don't trust AI output blindly).
-3. **Keep changes focused:** make small and atomic commits so that it's easy to undo changes.
-
----
-
-## 2. Naming Conventions :|
+## 1. Naming Conventions :|
 Follow standard Python naming:
 
 | Item | Style | Example |
@@ -28,7 +20,7 @@ Follow standard Python naming:
 
 ---
 
-## 3. Code Style & Structure
+## 2. Code Style & Structure
 - **Type Hints:** Use type hints on function signatures so everyone knows what goes in and out:
   ```python
   def get_tile(grid_x: int, grid_y: int) -> str:
@@ -40,10 +32,3 @@ Follow standard Python naming:
 - **Separate Logic from Rendering:** Keep simulation/game state (grids, machines, items) separate from `pygame` drawing code. That makes multiplayer syncing much easier later.
 
 ---
-
-## 4. Git & Collaboration Workflow
-- **Pull before you start:** Always `git pull` before writing new code.
-- **One feature per branch/PR (or small commits):** Don't work for days without pushing. Small, frequent commits are easier to merge.
-- **Clear commit messages:** Say *what* changed, e.g. `Add tile hover highlight` or `Fix camera offset math`.
-- **Don't commit environment files:** Keep `.venv/`, `__pycache__/`, and `.pyc` files out of Git (use `.gitignore`).
-- **Update `requirements.txt`:** If you install a new package, run `pip freeze > requirements.txt` (or add it to `requirements.txt`) so everyone stays in sync.
